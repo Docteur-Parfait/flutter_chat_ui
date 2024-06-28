@@ -8,6 +8,7 @@ abstract class ChatL10n {
   const ChatL10n({
     required this.and,
     required this.attachmentButtonAccessibilityLabel,
+    required this.voiceButtonAccessibilityLabel,
     required this.emptyChatPlaceholder,
     required this.fileButtonAccessibilityLabel,
     required this.inputPlaceholder,
@@ -22,6 +23,9 @@ abstract class ChatL10n {
 
   /// Accessibility label (hint) for the attachment button.
   final String attachmentButtonAccessibilityLabel;
+
+  /// Accessibility label (hint) for the voice button.
+  final String voiceButtonAccessibilityLabel;
 
   /// Placeholder when there are no messages.
   final String emptyChatPlaceholder;
@@ -53,6 +57,7 @@ class ChatL10nAr extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nAr({
     super.and = 'و',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'إرسال الوسائط',
     super.emptyChatPlaceholder = 'لا يوجد رسائل هنا بعد',
     super.fileButtonAccessibilityLabel = 'ملف',
@@ -72,6 +77,7 @@ class ChatL10nDe extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nDe({
     super.and = 'und',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Medien senden',
     super.emptyChatPlaceholder = 'Noch keine Nachrichten',
     super.fileButtonAccessibilityLabel = 'Datei',
@@ -91,6 +97,7 @@ class ChatL10nEn extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nEn({
     super.and = 'and',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Send media',
     super.emptyChatPlaceholder = 'No messages here yet',
     super.fileButtonAccessibilityLabel = 'File',
@@ -110,6 +117,7 @@ class ChatL10nEs extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nEs({
     super.and = 'y',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Enviar multimedia',
     super.emptyChatPlaceholder = 'Aún no hay mensajes',
     super.fileButtonAccessibilityLabel = 'Archivo',
@@ -126,6 +134,7 @@ class ChatL10nEs extends ChatL10n {
 class ChatL10nFa extends ChatL10n {
   const ChatL10nFa({
     super.and = 'و',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'ارسال رسانه',
     super.emptyChatPlaceholder = 'هنوز پیامی در اینجا وجود ندارد',
     super.fileButtonAccessibilityLabel = 'فایل',
@@ -145,6 +154,7 @@ class ChatL10nFi extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nFi({
     super.and = 'ja',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Lähetä media',
     super.emptyChatPlaceholder = 'Täällä ei ole vielä viestejä',
     super.fileButtonAccessibilityLabel = 'Tiedosto',
@@ -164,6 +174,7 @@ class ChatL10nKo extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nKo({
     super.and = '및',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = '미디어 보내기',
     super.emptyChatPlaceholder = '주고받은 메시지가 없습니다',
     super.fileButtonAccessibilityLabel = '파일',
@@ -183,6 +194,7 @@ class ChatL10nPl extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nPl({
     super.and = 'i',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Wyślij multimedia',
     super.emptyChatPlaceholder = 'Tu jeszcze nie ma wiadomości',
     super.fileButtonAccessibilityLabel = 'Plik',
@@ -202,6 +214,7 @@ class ChatL10nPt extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nPt({
     super.and = 'e',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Envia mídia',
     super.emptyChatPlaceholder = 'Ainda não há mensagens aqui',
     super.fileButtonAccessibilityLabel = 'Arquivo',
@@ -221,6 +234,7 @@ class ChatL10nRu extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nRu({
     super.and = 'и',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Отправить медиа',
     super.emptyChatPlaceholder = 'Пока что у вас нет сообщений',
     super.fileButtonAccessibilityLabel = 'Файл',
@@ -240,6 +254,7 @@ class ChatL10nSe extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nSe({
     super.and = 'och',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Skicka media',
     super.emptyChatPlaceholder = 'Inga meddelanden än',
     super.fileButtonAccessibilityLabel = 'Fil',
@@ -259,6 +274,7 @@ class ChatL10nTr extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nTr({
     super.and = 've',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Medya gönder',
     super.emptyChatPlaceholder = 'Henüz mesaj yok',
     super.fileButtonAccessibilityLabel = 'Dosya',
@@ -278,6 +294,7 @@ class ChatL10nUk extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nUk({
     super.and = 'та ще',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = 'Надіслати медіа',
     super.emptyChatPlaceholder = 'Повідомлень ще немає',
     super.fileButtonAccessibilityLabel = 'Файл',
@@ -297,6 +314,7 @@ class ChatL10nZhCN extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nZhCN({
     super.and = '和其他',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = '发送媒体文件',
     super.emptyChatPlaceholder = '暂无消息',
     super.fileButtonAccessibilityLabel = '文件',
@@ -316,6 +334,7 @@ class ChatL10nZhTW extends ChatL10n {
   /// which extends [ChatL10n].
   const ChatL10nZhTW({
     super.and = '和另外',
+    super.voiceButtonAccessibilityLabel = 'Send voice',
     super.attachmentButtonAccessibilityLabel = '傳送媒體',
     super.emptyChatPlaceholder = '還沒有訊息在這裡',
     super.fileButtonAccessibilityLabel = '檔案',

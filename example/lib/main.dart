@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -42,6 +43,21 @@ class _ChatPageState extends State<ChatPage> {
   final _user = const types.User(
     id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
   );
+
+  bool voiceRecording = false;
+
+  void voiceManage() {
+    log('VOICING');
+    if (voiceRecording) {
+      setState(() {
+        voiceRecording = false;
+      });
+    } else {
+      setState(() {
+        voiceRecording = true;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -211,6 +227,8 @@ class _ChatPageState extends State<ChatPage> {
       text: message.text,
     );
 
+    voiceManage();
+
     _addMessage(textMessage);
   }
 
@@ -233,9 +251,15 @@ class _ChatPageState extends State<ChatPage> {
           onMessageTap: _handleMessageTap,
           onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
+          onVoicePressed: voiceManage,
           showUserAvatars: true,
           showUserNames: true,
           user: _user,
+          inputOptions: InputOptions(
+            voiceButtonVisibilityMode: voiceRecording
+                ? VoiceButtonVisibilityMode.recording
+                : VoiceButtonVisibilityMode.always,
+          ),
         ),
       );
 }

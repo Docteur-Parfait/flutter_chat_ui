@@ -84,6 +84,7 @@ class Chat extends StatefulWidget {
     this.onMessageVisibilityChanged,
     this.onPreviewDataFetched,
     required this.onSendPressed,
+    this.onVoicePressed,
     this.scrollController,
     this.scrollPhysics,
     this.scrollToUnreadOptions = const ScrollToUnreadOptions(),
@@ -267,6 +268,9 @@ class Chat extends StatefulWidget {
   /// See [Input.onSendPressed].
   final void Function(types.PartialText) onSendPressed;
 
+  /// See [Input.onVoicePressed].
+  final VoidCallback? onVoicePressed;
+
   /// See [ChatList.scrollController].
   /// If provided, you cannot use the scroll to message functionality.
   final AutoScrollController? scrollController;
@@ -375,13 +379,11 @@ class ChatState extends State<Chat> {
   }
 
   /// Scroll to the message with the specified [id].
-  void scrollToMessage(
-    String id, {
-    Duration? scrollDuration,
-    bool withHighlight = false,
-    Duration? highlightDuration,
-    AutoScrollPosition? preferPosition
-  }) async {
+  void scrollToMessage(String id,
+      {Duration? scrollDuration,
+      bool withHighlight = false,
+      Duration? highlightDuration,
+      AutoScrollPosition? preferPosition}) async {
     await _scrollController.scrollToIndex(
       chatMessageAutoScrollIndexById[id]!,
       duration: scrollDuration ?? scrollAnimationDuration,
@@ -671,6 +673,7 @@ class ChatState extends State<Chat> {
                             isAttachmentUploading: widget.isAttachmentUploading,
                             onAttachmentPressed: widget.onAttachmentPressed,
                             onSendPressed: widget.onSendPressed,
+                            onVoicePressed: widget.onVoicePressed,
                             options: widget.inputOptions,
                           ),
                     ],

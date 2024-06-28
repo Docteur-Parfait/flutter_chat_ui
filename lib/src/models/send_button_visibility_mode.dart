@@ -7,6 +7,9 @@ enum SendButtonVisibilityMode {
   /// The [SendButton] will only appear when the [TextField] is not empty.
   editing,
 
+  /// The [SendButton] will only appear when the [TextField] is not empty.
+  recording,
+
   /// Always hide the [SendButton] regardless of the [TextField] state.
   hidden,
 }

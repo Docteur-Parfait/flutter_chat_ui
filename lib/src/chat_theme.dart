@@ -58,6 +58,8 @@ abstract class ChatTheme {
   const ChatTheme({
     required this.attachmentButtonIcon,
     required this.attachmentButtonMargin,
+    required this.voiceButtonIcon,
+    required this.voiceButtonMargin,
     required this.backgroundColor,
     this.bubbleMargin,
     required this.dateDividerMargin,
@@ -122,6 +124,12 @@ abstract class ChatTheme {
 
   /// Margin of attachment button.
   final EdgeInsets? attachmentButtonMargin;
+
+  /// Icon for select voice button.
+  final Widget? voiceButtonIcon;
+
+  /// Margin of voice button.
+  final EdgeInsets? voiceButtonMargin;
 
   /// Used as a background color of a chat widget.
   final Color backgroundColor;
@@ -319,6 +327,8 @@ class DefaultChatTheme extends ChatTheme {
   const DefaultChatTheme({
     super.attachmentButtonIcon,
     super.attachmentButtonMargin,
+    super.voiceButtonIcon,
+    super.voiceButtonMargin,
     super.backgroundColor = neutral7,
     super.bubbleMargin,
     super.dateDividerMargin = const EdgeInsets.only(
@@ -493,6 +503,8 @@ class DarkChatTheme extends ChatTheme {
   const DarkChatTheme({
     super.attachmentButtonIcon,
     super.attachmentButtonMargin,
+    super.voiceButtonIcon,
+    super.voiceButtonMargin,
     super.backgroundColor = dark,
     super.bubbleMargin,
     super.dateDividerMargin = const EdgeInsets.only(

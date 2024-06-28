@@ -5,12 +5,14 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import '../../models/input_clear_mode.dart';
 import '../../models/send_button_visibility_mode.dart';
+import '../../models/voice_button_visibility_mode.dart';
 import '../../util.dart';
 import '../state/inherited_chat_theme.dart';
 import '../state/inherited_l10n.dart';
 import 'attachment_button.dart';
 import 'input_text_field_controller.dart';
 import 'send_button.dart';
+import 'voice_button.dart';
 
 /// A class that represents bottom bar widget with a text field, attachment and
 /// send buttons inside. By default hides send button when text field is empty.
@@ -20,6 +22,7 @@ class Input extends StatefulWidget {
     super.key,
     this.isAttachmentUploading,
     this.onAttachmentPressed,
+    this.onVoicePressed,
     required this.onSendPressed,
     this.options = const InputOptions(),
   });
@@ -32,6 +35,9 @@ class Input extends StatefulWidget {
 
   /// See [AttachmentButton.onPressed].
   final VoidCallback? onAttachmentPressed;
+
+  /// See [VoiceButton.onPressed].
+  final VoidCallback? onVoicePressed;
 
   /// Will be called on [SendButton] tap. Has [types.PartialText] which can
   /// be transformed to [types.TextMessage] and added to the messages list.
@@ -69,6 +75,7 @@ class _InputState extends State<Input> {
   );
 
   bool _sendButtonVisible = false;
+  bool _voiceButtonVisible = true;
   late TextEditingController _textController;
 
   @override
@@ -78,6 +85,7 @@ class _InputState extends State<Input> {
     _textController =
         widget.options.textEditingController ?? InputTextFieldController();
     _handleSendButtonVisibilityModeChange();
+    _handleVoiceButtonVisibilityModeChange;
   }
 
   void _handleSendButtonVisibilityModeChange() {
@@ -86,11 +94,31 @@ class _InputState extends State<Input> {
         SendButtonVisibilityMode.hidden) {
       _sendButtonVisible = false;
     } else if (widget.options.sendButtonVisibilityMode ==
+        SendButtonVisibilityMode.recording) {
+      _sendButtonVisible = true;
+    } else if (widget.options.sendButtonVisibilityMode ==
         SendButtonVisibilityMode.editing) {
       _sendButtonVisible = _textController.text.trim() != '';
       _textController.addListener(_handleTextControllerChange);
     } else {
       _sendButtonVisible = true;
+    }
+  }
+
+  void _handleVoiceButtonVisibilityModeChange() {
+    _textController.removeListener(_handleTextControllerChange);
+    if (widget.options.voiceButtonVisibilityMode ==
+        VoiceButtonVisibilityMode.hidden) {
+      _voiceButtonVisible = false;
+    } else if (widget.options.voiceButtonVisibilityMode ==
+        VoiceButtonVisibilityMode.recording) {
+      _voiceButtonVisible = false;
+    } else if (widget.options.sendButtonVisibilityMode ==
+        SendButtonVisibilityMode.editing) {
+      _voiceButtonVisible = _textController.text.trim() == '';
+      _textController.addListener(_handleTextControllerChange);
+    } else {
+      _voiceButtonVisible = true;
     }
   }
 
@@ -112,6 +140,7 @@ class _InputState extends State<Input> {
     }
     setState(() {
       _sendButtonVisible = _textController.text.trim() != '';
+      _voiceButtonVisible = _textController.text.trim() == '';
     });
   }
 
@@ -223,6 +252,18 @@ class _InputState extends State<Input> {
                     ),
                   ),
                 ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: buttonPadding.bottom + buttonPadding.top + 24,
+                  ),
+                  child: Visibility(
+                    visible: _voiceButtonVisible,
+                    child: VoiceButton(
+                      onPressed: widget.onVoicePressed,
+                      padding: buttonPadding,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -237,6 +278,11 @@ class _InputState extends State<Input> {
     if (widget.options.sendButtonVisibilityMode !=
         oldWidget.options.sendButtonVisibilityMode) {
       _handleSendButtonVisibilityModeChange();
+    }
+
+    if (widget.options.voiceButtonVisibilityMode !=
+        oldWidget.options.voiceButtonVisibilityMode) {
+      _handleVoiceButtonVisibilityModeChange();
     }
   }
 
@@ -262,6 +308,7 @@ class InputOptions {
     this.onTextChanged,
     this.onTextFieldTap,
     this.sendButtonVisibilityMode = SendButtonVisibilityMode.editing,
+    this.voiceButtonVisibilityMode = VoiceButtonVisibilityMode.always,
     this.textEditingController,
     this.autocorrect = true,
     this.autofocus = false,
@@ -285,6 +332,11 @@ class InputOptions {
   /// [TextField] state inside the [Input] widget.
   /// Defaults to [SendButtonVisibilityMode.editing].
   final SendButtonVisibilityMode sendButtonVisibilityMode;
+
+  /// Controls the visibility behavior of the [VoiceButton] based on the
+  /// [TextField] state inside the [Input] widget.
+  /// Defaults to [VoiceButtonVisibilityMode.always].
+  final VoiceButtonVisibilityMode voiceButtonVisibilityMode;
 
   /// Custom [TextEditingController]. If not provided, defaults to the
   /// [InputTextFieldController], which extends [TextEditingController] and has
