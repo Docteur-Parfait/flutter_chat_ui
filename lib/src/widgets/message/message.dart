@@ -11,6 +11,7 @@ import '../state/inherited_user.dart';
 import 'file_message.dart';
 import 'image_message.dart';
 import 'message_status.dart';
+import 'replied_message.dart';
 import 'text_message.dart';
 import 'user_avatar.dart';
 
@@ -221,66 +222,125 @@ class Message extends StatelessWidget {
               child: _messageBuilder(),
             ),
           );
-    return bubbleBuilder != null
-        ? bubbleBuilder!(
-            _messageBuilder(),
-            message: message,
-            nextMessageInGroup: roundBorder,
-          )
-        : defaultMessage;
+    return Stack(
+      children: [
+        Column(
+          children: [
+            bubbleBuilder != null
+                ? bubbleBuilder!(
+                    _messageBuilder(),
+                    message: message,
+                    nextMessageInGroup: roundBorder,
+                  )
+                : defaultMessage,
+            // const SizedBox(
+            //   height: 20,
+            // )
+          ],
+        ),
+        // const Positioned(
+        //     bottom: 0,
+        //     right: 0,
+        //     child: Text('🥰', style: TextStyle(fontSize: 25))),
+      ],
+    );
   }
 
   Widget _messageBuilder() {
     switch (message.type) {
       case types.MessageType.audio:
         final audioMessage = message as types.AudioMessage;
-        return audioMessageBuilder != null
-            ? audioMessageBuilder!(audioMessage, messageWidth: messageWidth)
-            : const SizedBox();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (message.repliedMessage != null)
+              RepliedMessage(message: message),
+            audioMessageBuilder != null
+                ? audioMessageBuilder!(audioMessage, messageWidth: messageWidth)
+                : const SizedBox(),
+          ],
+        );
       case types.MessageType.custom:
         final customMessage = message as types.CustomMessage;
-        return customMessageBuilder != null
-            ? customMessageBuilder!(customMessage, messageWidth: messageWidth)
-            : const SizedBox();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (message.repliedMessage != null)
+              RepliedMessage(message: message),
+            customMessageBuilder != null
+                ? customMessageBuilder!(customMessage,
+                    messageWidth: messageWidth)
+                : const SizedBox(),
+          ],
+        );
       case types.MessageType.file:
         final fileMessage = message as types.FileMessage;
-        return fileMessageBuilder != null
-            ? fileMessageBuilder!(fileMessage, messageWidth: messageWidth)
-            : FileMessage(message: fileMessage);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (message.repliedMessage != null)
+              RepliedMessage(message: message),
+            fileMessageBuilder != null
+                ? fileMessageBuilder!(fileMessage, messageWidth: messageWidth)
+                : FileMessage(message: fileMessage),
+          ],
+        );
       case types.MessageType.image:
         final imageMessage = message as types.ImageMessage;
-        return imageMessageBuilder != null
-            ? imageMessageBuilder!(imageMessage, messageWidth: messageWidth)
-            : ImageMessage(
-                imageHeaders: imageHeaders,
-                imageProviderBuilder: imageProviderBuilder,
-                message: imageMessage,
-                messageWidth: messageWidth,
-              );
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (message.repliedMessage != null)
+              RepliedMessage(message: message),
+            imageMessageBuilder != null
+                ? imageMessageBuilder!(imageMessage, messageWidth: messageWidth)
+                : ImageMessage(
+                    imageHeaders: imageHeaders,
+                    imageProviderBuilder: imageProviderBuilder,
+                    message: imageMessage,
+                    messageWidth: messageWidth,
+                  ),
+          ],
+        );
       case types.MessageType.text:
         final textMessage = message as types.TextMessage;
-        return textMessageBuilder != null
-            ? textMessageBuilder!(
-                textMessage,
-                messageWidth: messageWidth,
-                showName: showName,
-              )
-            : TextMessage(
-                emojiEnlargementBehavior: emojiEnlargementBehavior,
-                hideBackgroundOnEmojiMessages: hideBackgroundOnEmojiMessages,
-                message: textMessage,
-                nameBuilder: nameBuilder,
-                onPreviewDataFetched: onPreviewDataFetched,
-                options: textMessageOptions,
-                showName: showName,
-                usePreviewData: usePreviewData,
-                userAgent: userAgent,
-              );
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (message.repliedMessage != null)
+              RepliedMessage(message: message),
+            textMessageBuilder != null
+                ? textMessageBuilder!(
+                    textMessage,
+                    messageWidth: messageWidth,
+                    showName: showName,
+                  )
+                : TextMessage(
+                    emojiEnlargementBehavior: emojiEnlargementBehavior,
+                    hideBackgroundOnEmojiMessages:
+                        hideBackgroundOnEmojiMessages,
+                    message: textMessage,
+                    nameBuilder: nameBuilder,
+                    onPreviewDataFetched: onPreviewDataFetched,
+                    options: textMessageOptions,
+                    showName: showName,
+                    usePreviewData: usePreviewData,
+                    userAgent: userAgent,
+                  ),
+          ],
+        );
       case types.MessageType.video:
         final videoMessage = message as types.VideoMessage;
-        return videoMessageBuilder != null
-            ? videoMessageBuilder!(videoMessage, messageWidth: messageWidth)
-            : const SizedBox();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (message.repliedMessage != null)
+              RepliedMessage(message: message),
+            videoMessageBuilder != null
+                ? videoMessageBuilder!(videoMessage, messageWidth: messageWidth)
+                : const SizedBox(),
+          ],
+        );
       default:
         return const SizedBox();
     }
@@ -352,62 +412,65 @@ class Message extends StatelessWidget {
                 right: isMobile ? query.padding.right : 0,
               ));
 
-    return Container(
-      alignment: bubbleRtlAlignment == BubbleRtlAlignment.left
-          ? currentUserIsAuthor
-              ? AlignmentDirectional.centerEnd
-              : AlignmentDirectional.centerStart
-          : currentUserIsAuthor
-              ? Alignment.centerRight
-              : Alignment.centerLeft,
-      margin: bubbleMargin,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        textDirection: bubbleRtlAlignment == BubbleRtlAlignment.left
-            ? null
-            : TextDirection.ltr,
-        children: [
-          if (!currentUserIsAuthor && showUserAvatars) _avatarBuilder(),
-          if (currentUserIsAuthor && isLeftStatus) _statusIcon(context),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: messageWidth.toDouble(),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onDoubleTap: () => onMessageDoubleTap?.call(context, message),
-                  onLongPress: () => onMessageLongPress?.call(context, message),
-                  onTap: () => onMessageTap?.call(context, message),
-                  child: onMessageVisibilityChanged != null
-                      ? VisibilityDetector(
-                          key: Key(message.id),
-                          onVisibilityChanged: (visibilityInfo) =>
-                              onMessageVisibilityChanged!(
-                            message,
-                            visibilityInfo.visibleFraction > 0.1,
-                          ),
-                          child: _bubbleBuilder(
+    return GestureDetector(
+      onLongPress: () => onMessageLongPress?.call(context, message),
+      child: Container(
+        alignment: bubbleRtlAlignment == BubbleRtlAlignment.left
+            ? currentUserIsAuthor
+                ? AlignmentDirectional.centerEnd
+                : AlignmentDirectional.centerStart
+            : currentUserIsAuthor
+                ? Alignment.centerRight
+                : Alignment.centerLeft,
+        margin: bubbleMargin,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          textDirection: bubbleRtlAlignment == BubbleRtlAlignment.left
+              ? null
+              : TextDirection.ltr,
+          children: [
+            if (!currentUserIsAuthor && showUserAvatars) _avatarBuilder(),
+            if (currentUserIsAuthor && isLeftStatus) _statusIcon(context),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: messageWidth.toDouble(),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onDoubleTap: () =>
+                        onMessageDoubleTap?.call(context, message),
+                    onTap: () => onMessageTap?.call(context, message),
+                    child: onMessageVisibilityChanged != null
+                        ? VisibilityDetector(
+                            key: Key(message.id),
+                            onVisibilityChanged: (visibilityInfo) =>
+                                onMessageVisibilityChanged!(
+                              message,
+                              visibilityInfo.visibleFraction > 0.1,
+                            ),
+                            child: _bubbleBuilder(
+                              context,
+                              borderRadius.resolve(Directionality.of(context)),
+                              currentUserIsAuthor,
+                              enlargeEmojis,
+                            ),
+                          )
+                        : _bubbleBuilder(
                             context,
                             borderRadius.resolve(Directionality.of(context)),
                             currentUserIsAuthor,
                             enlargeEmojis,
                           ),
-                        )
-                      : _bubbleBuilder(
-                          context,
-                          borderRadius.resolve(Directionality.of(context)),
-                          currentUserIsAuthor,
-                          enlargeEmojis,
-                        ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          if (currentUserIsAuthor && !isLeftStatus) _statusIcon(context),
-        ],
+            if (currentUserIsAuthor && !isLeftStatus) _statusIcon(context),
+          ],
+        ),
       ),
     );
   }

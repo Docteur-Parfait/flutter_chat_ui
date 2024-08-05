@@ -15,6 +15,8 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'global_network_image_builder.dart';
+
 void main() {
   initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
@@ -46,6 +48,8 @@ class _ChatPageState extends State<ChatPage> {
 
   bool voiceRecording = false;
 
+  types.Message? replyMessage;
+
   void voiceManage() {
     log('VOICING');
     if (voiceRecording) {
@@ -72,46 +76,34 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _handleAttachmentPressed() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) => SafeArea(
-        child: SizedBox(
-          height: 144,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleImageSelection();
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('Photo'),
+    showModalBottomSheet(
+        context: context,
+        builder: (context) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.camera_alt_outlined),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleFileSelection();
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('File'),
+                ListTile(
+                  leading: const Icon(Icons.photo_outlined),
+                  title: const Text('Photo'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('Cancel'),
+                ListTile(
+                  leading: const Icon(Icons.close),
+                  title: const Text('Fermer'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+              ],
+            ));
   }
 
   void _handleFileSelection() async {
@@ -225,9 +217,16 @@ class _ChatPageState extends State<ChatPage> {
       createdAt: DateTime.now().millisecondsSinceEpoch,
       id: const Uuid().v4(),
       text: message.text,
+      repliedMessage: const types.TextMessage(
+          author: types.User(
+            firstName: 'Janice',
+            id: 'e52552f4-835d-4dbe-ba77-b076e659774d',
+          ),
+          id: '4e048753-2d60-4144-bc28-9967050aaf12',
+          text: 'What a ~nice~ _wonderful_ sunset! 😻'),
     );
 
-    voiceManage();
+    // voiceManage();
 
     _addMessage(textMessage);
   }
@@ -243,6 +242,47 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  void _handleMessageLongTap(BuildContext _, types.Message message) async {
+    // Show dialog with message
+    showModalBottomSheet(
+        context: context,
+        builder: (context) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.reply),
+                  title: const Text('Répondre'),
+                  onTap: () {
+                    setState(() {
+                      replyMessage = message;
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.delete_outlined,
+                    color: Colors.red,
+                  ),
+                  title: const Text(
+                    'Supprimer',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.close),
+                  title: const Text('Fermer'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Chat(
@@ -251,10 +291,19 @@ class _ChatPageState extends State<ChatPage> {
           onMessageTap: _handleMessageTap,
           onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
-          onVoicePressed: voiceManage,
+          onMessageLongPress: _handleMessageLongTap,
+          onReplyClose: () => setState(() {
+            replyMessage = null;
+          }),
           showUserAvatars: true,
           showUserNames: true,
           user: _user,
+          replyMessage: replyMessage,
+          imageMessageBuilder: (message, {required messageWidth}) =>
+              GlobalNetworkImage(
+                  imageUrl: message.uri,
+                  imageWidth: message.width,
+                  imageHeight: message.height),
           inputOptions: InputOptions(
             voiceButtonVisibilityMode: voiceRecording
                 ? VoiceButtonVisibilityMode.recording

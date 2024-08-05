@@ -60,6 +60,8 @@ abstract class ChatTheme {
     required this.attachmentButtonMargin,
     required this.voiceButtonIcon,
     required this.voiceButtonMargin,
+    required this.emojiButtonIcon,
+    required this.emojiButtonMargin,
     required this.backgroundColor,
     this.bubbleMargin,
     required this.dateDividerMargin,
@@ -130,6 +132,12 @@ abstract class ChatTheme {
 
   /// Margin of voice button.
   final EdgeInsets? voiceButtonMargin;
+
+  /// Icon for select voice button.
+  final Widget? emojiButtonIcon;
+
+  /// Margin of voice button.
+  final EdgeInsets? emojiButtonMargin;
 
   /// Used as a background color of a chat widget.
   final Color backgroundColor;
@@ -329,6 +337,8 @@ class DefaultChatTheme extends ChatTheme {
     super.attachmentButtonMargin,
     super.voiceButtonIcon,
     super.voiceButtonMargin,
+    super.emojiButtonIcon,
+    super.emojiButtonMargin,
     super.backgroundColor = neutral7,
     super.bubbleMargin,
     super.dateDividerMargin = const EdgeInsets.only(
@@ -372,9 +382,9 @@ class DefaultChatTheme extends ChatTheme {
       fontWeight: FontWeight.w500,
       height: 1.5,
     ),
-    super.messageBorderRadius = 20,
-    super.messageInsetsHorizontal = 20,
-    super.messageInsetsVertical = 16,
+    super.messageBorderRadius = 16,
+    super.messageInsetsHorizontal = 10,
+    super.messageInsetsVertical = 10,
     super.messageMaxWidth = 440,
     super.primaryColor = primary,
     super.receivedEmojiMessageTextStyle = const TextStyle(fontSize: 40),
@@ -505,6 +515,8 @@ class DarkChatTheme extends ChatTheme {
     super.attachmentButtonMargin,
     super.voiceButtonIcon,
     super.voiceButtonMargin,
+    super.emojiButtonIcon,
+    super.emojiButtonMargin,
     super.backgroundColor = dark,
     super.bubbleMargin,
     super.dateDividerMargin = const EdgeInsets.only(

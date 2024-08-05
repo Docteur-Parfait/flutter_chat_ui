@@ -83,8 +83,10 @@ class Chat extends StatefulWidget {
     this.onMessageTap,
     this.onMessageVisibilityChanged,
     this.onPreviewDataFetched,
+    this.onReplyClose,
     required this.onSendPressed,
-    this.onVoicePressed,
+    this.onVoiceLongPressStart,
+    this.onVoiceLongPressEnd,
     this.scrollController,
     this.scrollPhysics,
     this.scrollToUnreadOptions = const ScrollToUnreadOptions(),
@@ -99,6 +101,7 @@ class Chat extends StatefulWidget {
     this.usePreviewData = true,
     required this.user,
     this.userAgent,
+    this.replyMessage,
     this.useTopSafeAreaInset,
     this.videoMessageBuilder,
     this.slidableMessageBuilder,
@@ -151,6 +154,12 @@ class Chat extends StatefulWidget {
 
   /// Use utc time to convert message milliseconds to date.
   final bool dateIsUtc;
+
+  /// Message à repondre.
+  final types.Message? replyMessage;
+
+  // Fonction close
+  final void Function()? onReplyClose;
 
   /// Locale will be passed to the `Intl` package. Make sure you initialized
   /// date formatting in your app before passing any locale here, otherwise
@@ -268,9 +277,6 @@ class Chat extends StatefulWidget {
   /// See [Input.onSendPressed].
   final void Function(types.PartialText) onSendPressed;
 
-  /// See [Input.onVoicePressed].
-  final VoidCallback? onVoicePressed;
-
   /// See [ChatList.scrollController].
   /// If provided, you cannot use the scroll to message functionality.
   final AutoScrollController? scrollController;
@@ -340,6 +346,12 @@ class Chat extends StatefulWidget {
 
   /// Width ratio for message bubble.
   final double messageWidthRatio;
+
+  /// Callback for attachment button tap event.
+  final void Function(LongPressStartDetails)? onVoiceLongPressStart;
+
+  /// Callback for attachment button tap event.
+  final void Function(LongPressEndDetails)? onVoiceLongPressEnd;
 
   @override
   State<Chat> createState() => ChatState();
@@ -673,8 +685,11 @@ class ChatState extends State<Chat> {
                             isAttachmentUploading: widget.isAttachmentUploading,
                             onAttachmentPressed: widget.onAttachmentPressed,
                             onSendPressed: widget.onSendPressed,
-                            onVoicePressed: widget.onVoicePressed,
+                            onVoiceLongPressEnd: widget.onVoiceLongPressEnd,
+                            onVoiceLongPressStart: widget.onVoiceLongPressStart,
                             options: widget.inputOptions,
+                            replyMessage: widget.replyMessage,
+                            onReplyClose: widget.onReplyClose,
                           ),
                     ],
                   ),
