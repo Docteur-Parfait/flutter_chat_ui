@@ -62,7 +62,7 @@ class RepliedMessage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(message.author.firstName!,
+          Text(message.repliedMessage!.author.firstName!,
               style: currentUserisAuthor
                   ? theme.userNameTextStyle
                       .copyWith(color: authorNameColor ?? Colors.white)
