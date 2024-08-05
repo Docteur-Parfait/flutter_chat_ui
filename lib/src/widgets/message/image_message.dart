@@ -5,7 +5,6 @@ import '../../../flutter_chat_ui.dart';
 import '../../conditional/conditional.dart';
 import '../state/inherited_chat_theme.dart';
 import '../state/inherited_user.dart';
-import 'replied_message.dart';
 
 /// A class that represents image message widget. Supports different
 /// aspect ratios, renders blurred image as a background which is visible
@@ -106,8 +105,6 @@ class _ImageMessageState extends State<ImageMessage> {
     if (_size.aspectRatio == 0) {
       return Column(
         children: [
-          if (widget.message.repliedMessage != null)
-            RepliedMessage(message: widget.message),
           Container(
             color: InheritedChatTheme.of(context).theme.secondaryColor,
             height: _size.height,
@@ -118,8 +115,6 @@ class _ImageMessageState extends State<ImageMessage> {
     } else if (_size.aspectRatio < 0.1 || _size.aspectRatio > 10) {
       return Column(
         children: [
-          if (widget.message.repliedMessage != null)
-            RepliedMessage(message: widget.message),
           Container(
             color: user.id == widget.message.author.id
                 ? InheritedChatTheme.of(context).theme.primaryColor
@@ -199,8 +194,6 @@ class _ImageMessageState extends State<ImageMessage> {
     } else {
       return Column(
         children: [
-          if (widget.message.repliedMessage != null)
-            RepliedMessage(message: widget.message),
           Container(
             constraints: BoxConstraints(
               maxHeight: widget.messageWidth.toDouble(),
