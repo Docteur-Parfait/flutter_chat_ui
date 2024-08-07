@@ -84,6 +84,7 @@ class Chat extends StatefulWidget {
     this.onMessageVisibilityChanged,
     this.onPreviewDataFetched,
     this.onReplyClose,
+    this.onRepliedMessageTap,
     required this.onSendPressed,
     this.onVoiceLongPressStart,
     this.onVoiceLongPressEnd,
@@ -139,6 +140,9 @@ class Chat extends StatefulWidget {
   /// See [Message.customStatusBuilder].
   final Widget Function(types.Message message, {required BuildContext context})?
       customStatusBuilder;
+
+  /// when tap repliedMessage
+  final void Function()? onRepliedMessageTap;
 
   /// Allows you to customize the date format. IMPORTANT: only for the date, do not return time here. See [timeFormat] to customize the time format. [dateLocale] will be ignored if you use this, so if you want a localized date make sure you initialize your [DateFormat] with a locale. See [customDateHeaderText] for more customization.
   final DateFormat? dateFormat;
@@ -514,6 +518,7 @@ class ChatState extends State<Chat> {
           onMessageLongPress: widget.onMessageLongPress,
           onMessageStatusLongPress: widget.onMessageStatusLongPress,
           onMessageStatusTap: widget.onMessageStatusTap,
+          onRepliedMessageTap: widget.onRepliedMessageTap,
           onMessageTap: (context, tappedMessage) {
             if (tappedMessage is types.ImageMessage &&
                 widget.disableImageGallery != true) {

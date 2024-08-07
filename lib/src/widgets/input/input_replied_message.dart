@@ -1,9 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import '../../../flutter_chat_ui.dart';
 import '../state/inherited_chat_theme.dart';
-import '../state/inherited_user.dart';
 
 class InputRepliedMessage extends StatelessWidget {
   const InputRepliedMessage(
@@ -30,15 +30,14 @@ class InputRepliedMessage extends StatelessWidget {
     } else if (message.type == types.MessageType.image) {
       repliedMessage = '🖼️ Image';
     } else if (message.type == types.MessageType.audio) {
-      repliedMessage = '🎵 Audio';
+      repliedMessage = '🎙️ Audio';
     } else if (message.type == types.MessageType.video) {
       repliedMessage = '📹 Video';
     } else if (message.type == types.MessageType.file) {
-      repliedMessage = '📎 File';
+      repliedMessage = '📁 File';
     } else {
       repliedMessage = '';
     }
-    final user = InheritedUser.of(context).user;
 
     // final currentUserisRepliedAuthor =
     //     message.author.id == repliedMessage.author.id;
@@ -56,26 +55,58 @@ class InputRepliedMessage extends StatelessWidget {
           topLeft: Radius.circular(4),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(message.author.firstName!,
-              style: theme.userNameTextStyle
-                  .copyWith(color: authorNameColor ?? Colors.white)),
-          TextMessageText(
-            bodyTextStyle: messageColor != null
-                ? theme.sentMessageBodyTextStyle.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 13)
-                : theme.sentMessageBodyTextStyle.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 13),
-            text: repliedMessage,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(message.author.firstName!,
+                  style: theme.userNameTextStyle
+                      .copyWith(color: authorNameColor ?? Colors.white)),
+              TextMessageText(
+                bodyTextStyle: messageColor != null
+                    ? theme.sentMessageBodyTextStyle.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300,
+                        fontSize: 13)
+                    : theme.sentMessageBodyTextStyle.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300,
+                        fontSize: 13),
+                text: repliedMessage,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
+          if (message.type == types.MessageType.file)
+            Text('(${(message as types.FileMessage).size ~/ 1024}KB)',
+                style: theme.userNameTextStyle
+                    .copyWith(color: authorNameColor ?? Colors.white)),
+          if (message.type == types.MessageType.image)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: CachedNetworkImage(
+                imageUrl: (message as types.ImageMessage).uri,
+                width: 35,
+                height: 35,
+                fit: BoxFit.cover,
+              ),
+            ),
+          if (message.type == types.MessageType.video)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: CachedNetworkImage(
+                imageUrl: (message as types.VideoMessage).uri,
+                width: 35,
+                height: 35,
+                fit: BoxFit.cover,
+              ),
+            ),
+          if (message.type == types.MessageType.audio)
+            Text(
+                '(${formatDuration((message as types.AudioMessage).duration)})')
         ],
       ),
     );

@@ -45,6 +45,7 @@ class Message extends StatelessWidget {
     this.onMessageTap,
     this.onMessageVisibilityChanged,
     this.onPreviewDataFetched,
+    this.onRepliedMessageTap,
     required this.roundBorder,
     required this.showAvatar,
     required this.showName,
@@ -171,6 +172,9 @@ class Message extends StatelessWidget {
   /// Show user avatars for received messages. Useful for a group chat.
   final bool showUserAvatars;
 
+  /// when tap repliedMessage
+  final void Function()? onRepliedMessageTap;
+
   /// Build a text message inside predefined bubble.
   final Widget Function(
     types.TextMessage, {
@@ -253,7 +257,10 @@ class Message extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (message.repliedMessage != null)
-              RepliedMessage(message: message),
+              GestureDetector(
+                onTap: onRepliedMessageTap,
+                child: RepliedMessage(message: message),
+              ),
             audioMessageBuilder != null
                 ? audioMessageBuilder!(audioMessage, messageWidth: messageWidth)
                 : const SizedBox(),
@@ -265,7 +272,10 @@ class Message extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (message.repliedMessage != null)
-              RepliedMessage(message: message),
+              GestureDetector(
+                onTap: onRepliedMessageTap,
+                child: RepliedMessage(message: message),
+              ),
             customMessageBuilder != null
                 ? customMessageBuilder!(customMessage,
                     messageWidth: messageWidth)
@@ -278,7 +288,10 @@ class Message extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (message.repliedMessage != null)
-              RepliedMessage(message: message),
+              GestureDetector(
+                onTap: onRepliedMessageTap,
+                child: RepliedMessage(message: message),
+              ),
             fileMessageBuilder != null
                 ? fileMessageBuilder!(fileMessage, messageWidth: messageWidth)
                 : FileMessage(message: fileMessage),
@@ -290,7 +303,10 @@ class Message extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (message.repliedMessage != null)
-              RepliedMessage(message: message),
+              GestureDetector(
+                onTap: onRepliedMessageTap,
+                child: RepliedMessage(message: message),
+              ),
             imageMessageBuilder != null
                 ? imageMessageBuilder!(imageMessage, messageWidth: messageWidth)
                 : ImageMessage(
@@ -307,7 +323,10 @@ class Message extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (message.repliedMessage != null)
-              RepliedMessage(message: message),
+              GestureDetector(
+                onTap: onRepliedMessageTap,
+                child: RepliedMessage(message: message),
+              ),
             textMessageBuilder != null
                 ? textMessageBuilder!(
                     textMessage,
@@ -334,7 +353,10 @@ class Message extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (message.repliedMessage != null)
-              RepliedMessage(message: message),
+              GestureDetector(
+                onTap: onRepliedMessageTap,
+                child: RepliedMessage(message: message),
+              ),
             videoMessageBuilder != null
                 ? videoMessageBuilder!(videoMessage, messageWidth: messageWidth)
                 : const SizedBox(),
