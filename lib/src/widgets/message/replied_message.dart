@@ -44,7 +44,8 @@ class RepliedMessage extends StatelessWidget {
     } else if (message.repliedMessage!.type == types.MessageType.image) {
       repliedMessage = '🖼️ Image';
     } else if (message.repliedMessage!.type == types.MessageType.audio) {
-      repliedMessage = '🎙️ Audio';
+      repliedMessage =
+          '🎙️ Audio (${formatDuration((message.repliedMessage! as types.AudioMessage).duration)})';
     } else if (message.repliedMessage!.type == types.MessageType.video) {
       repliedMessage = '📹 Video';
     } else if (message.repliedMessage!.type == types.MessageType.file) {
@@ -136,9 +137,6 @@ class RepliedMessage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-          if (message.repliedMessage!.type == types.MessageType.audio)
-            Text(
-                '(${formatDuration((message.repliedMessage! as types.AudioMessage).duration)})')
         ],
       ),
     );

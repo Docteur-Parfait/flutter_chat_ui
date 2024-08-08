@@ -30,7 +30,8 @@ class InputRepliedMessage extends StatelessWidget {
     } else if (message.type == types.MessageType.image) {
       repliedMessage = '🖼️ Image';
     } else if (message.type == types.MessageType.audio) {
-      repliedMessage = '🎙️ Audio';
+      repliedMessage =
+          '🎙️ Audio (${formatDuration((message as types.AudioMessage).duration)})';
     } else if (message.type == types.MessageType.video) {
       repliedMessage = '📹 Video';
     } else if (message.type == types.MessageType.file) {
@@ -104,9 +105,6 @@ class InputRepliedMessage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-          if (message.type == types.MessageType.audio)
-            Text(
-                '(${formatDuration((message as types.AudioMessage).duration)})')
         ],
       ),
     );
