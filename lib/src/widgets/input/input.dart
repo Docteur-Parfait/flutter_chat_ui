@@ -24,6 +24,7 @@ class Input extends StatefulWidget {
     this.onReplyClose,
     required this.onSendPressed,
     this.options = const InputOptions(),
+    this.customInputWidget,
   });
 
   /// Whether attachment is uploading. Will replace attachment button with a
@@ -60,6 +61,9 @@ class Input extends StatefulWidget {
 
   // Fonction close
   final void Function()? onReplyClose;
+
+  // Custom widget
+  final Widget? customInputWidget;
 
   @override
   State<Input> createState() => _InputState();
@@ -234,48 +238,50 @@ class _InputState extends State<Input> {
                     Expanded(
                       child: Padding(
                         padding: textPadding,
-                        child: TextField(
-                          enabled: widget.options.enabled,
-                          autocorrect: widget.options.autocorrect,
-                          autofocus: widget.options.autofocus,
-                          enableSuggestions: widget.options.enableSuggestions,
-                          controller: _textController,
-                          cursorColor: InheritedChatTheme.of(context)
-                              .theme
-                              .inputTextCursorColor,
-                          decoration: InheritedChatTheme.of(context)
-                              .theme
-                              .inputTextDecoration
-                              .copyWith(
-                                hintStyle: InheritedChatTheme.of(context)
-                                    .theme
-                                    .inputTextStyle
-                                    .copyWith(
-                                      color: InheritedChatTheme.of(context)
-                                          .theme
-                                          .inputTextColor
-                                          .withOpacity(0.5),
-                                    ),
-                                hintText: InheritedL10n.of(context)
-                                    .l10n
-                                    .inputPlaceholder,
-                              ),
-                          focusNode: _inputFocusNode,
-                          keyboardType: widget.options.keyboardType,
-                          maxLines: 5,
-                          minLines: 1,
-                          onChanged: widget.options.onTextChanged,
-                          onTap: widget.options.onTextFieldTap,
-                          style: InheritedChatTheme.of(context)
-                              .theme
-                              .inputTextStyle
-                              .copyWith(
-                                color: InheritedChatTheme.of(context)
-                                    .theme
-                                    .inputTextColor,
-                              ),
-                          textCapitalization: TextCapitalization.sentences,
-                        ),
+                        child: widget.customInputWidget ??
+                            TextField(
+                              enabled: widget.options.enabled,
+                              autocorrect: widget.options.autocorrect,
+                              autofocus: widget.options.autofocus,
+                              enableSuggestions:
+                                  widget.options.enableSuggestions,
+                              controller: _textController,
+                              cursorColor: InheritedChatTheme.of(context)
+                                  .theme
+                                  .inputTextCursorColor,
+                              decoration: InheritedChatTheme.of(context)
+                                  .theme
+                                  .inputTextDecoration
+                                  .copyWith(
+                                    hintStyle: InheritedChatTheme.of(context)
+                                        .theme
+                                        .inputTextStyle
+                                        .copyWith(
+                                          color: InheritedChatTheme.of(context)
+                                              .theme
+                                              .inputTextColor
+                                              .withOpacity(0.5),
+                                        ),
+                                    hintText: InheritedL10n.of(context)
+                                        .l10n
+                                        .inputPlaceholder,
+                                  ),
+                              focusNode: _inputFocusNode,
+                              keyboardType: widget.options.keyboardType,
+                              maxLines: 5,
+                              minLines: 1,
+                              onChanged: widget.options.onTextChanged,
+                              onTap: widget.options.onTextFieldTap,
+                              style: InheritedChatTheme.of(context)
+                                  .theme
+                                  .inputTextStyle
+                                  .copyWith(
+                                    color: InheritedChatTheme.of(context)
+                                        .theme
+                                        .inputTextColor,
+                                  ),
+                              textCapitalization: TextCapitalization.sentences,
+                            ),
                       ),
                     ),
                     ConstrainedBox(
