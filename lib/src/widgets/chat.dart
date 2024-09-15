@@ -88,6 +88,8 @@ class Chat extends StatefulWidget {
     required this.onSendPressed,
     this.onVoiceLongPressStart,
     this.onVoiceLongPressEnd,
+    this.onVoicePanLeft,
+    this.onVoicePanUp,
     this.scrollController,
     this.scrollPhysics,
     this.scrollToUnreadOptions = const ScrollToUnreadOptions(),
@@ -356,6 +358,12 @@ class Chat extends StatefulWidget {
 
   /// Callback for attachment button tap event.
   final void Function(LongPressEndDetails)? onVoiceLongPressEnd;
+
+  /// Callback for attachment button tap event.
+  final void Function(void)? onVoicePanLeft;
+
+  /// Callback for attachment button tap event.
+  final void Function(void)? onVoicePanUp;
 
   @override
   State<Chat> createState() => ChatState();
@@ -692,6 +700,8 @@ class ChatState extends State<Chat> {
                             onSendPressed: widget.onSendPressed,
                             onVoiceLongPressEnd: widget.onVoiceLongPressEnd,
                             onVoiceLongPressStart: widget.onVoiceLongPressStart,
+                            onVoicePanLeft: widget.onVoicePanLeft,
+                            onVoicePanUp: widget.onVoicePanUp,
                             options: widget.inputOptions,
                             replyMessage: widget.replyMessage,
                             onReplyClose: widget.onReplyClose,

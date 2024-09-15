@@ -217,13 +217,7 @@ class _ChatPageState extends State<ChatPage> {
       createdAt: DateTime.now().millisecondsSinceEpoch,
       id: const Uuid().v4(),
       text: message.text,
-      repliedMessage: const types.TextMessage(
-          author: types.User(
-            firstName: 'Janice',
-            id: 'e52552f4-835d-4dbe-ba77-b076e659774d',
-          ),
-          id: '4e048753-2d60-4144-bc28-9967050aaf12',
-          text: 'What a ~nice~ _wonderful_ sunset! 😻'),
+      repliedMessage: replyMessage,
     );
 
     // voiceManage();

@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import '../state/inherited_chat_theme.dart';
 
 /// A class that represents attachment button widget.
-class VoiceButton extends StatelessWidget {
+class VoiceButton extends StatefulWidget {
   /// Creates attachment button widget.
   const VoiceButton({
     super.key,
     this.isLoading = false,
     this.onLongPressStart,
     this.onLongPressEnd,
+    this.onPanLeft,
+    this.onPanUp,
     this.padding = EdgeInsets.zero,
   });
 
@@ -22,8 +24,21 @@ class VoiceButton extends StatelessWidget {
   /// Callback for attachment button tap event.
   final void Function(LongPressEndDetails)? onLongPressEnd;
 
+  /// Callback for attachment button tap event.
+  final void Function(void)? onPanLeft;
+
+  /// Callback for attachment button tap event.
+  final void Function(void)? onPanUp;
+
   /// Padding around the button.
   final EdgeInsets padding;
+
+  @override
+  State<VoiceButton> createState() => _VoiceButtonState();
+}
+
+class _VoiceButtonState extends State<VoiceButton> {
+  Offset _startSwipePosition = Offset.zero; // Position de départ du glissement
 
   @override
   Widget build(BuildContext context) => Container(
@@ -35,14 +50,35 @@ class VoiceButton extends StatelessWidget {
               0,
             ),
         child: GestureDetector(
-          onLongPressStart: onLongPressStart,
-          onLongPressEnd: onLongPressEnd,
+          onLongPressStart: widget.onLongPressStart,
+          onLongPressEnd: widget.onLongPressEnd,
+          onPanStart: (details) {
+            _startSwipePosition = details.localPosition;
+          },
+          onPanEnd: (details) {
+            // Calcule la différence entre la position de départ et la fin du glissement
+            final swipeDifference =
+                _startSwipePosition - details.velocity.pixelsPerSecond;
+
+            // Si la différence horizontale est supérieure à la verticale
+            if (swipeDifference.dx.abs() > swipeDifference.dy.abs()) {
+              // Glissement horizontal détecté
+              if (swipeDifference.dx > 0) {
+                widget.onPanLeft;
+              }
+            } else {
+              // Glissement vertical détecté
+              if (swipeDifference.dy > 0) {
+                widget.onPanUp;
+              }
+            }
+          },
           child: Container(
             constraints: const BoxConstraints(
               minHeight: 24,
               minWidth: 24,
             ),
-            child: isLoading
+            child: widget.isLoading
                 ? SizedBox(
                     height: 20,
                     width: 20,

@@ -18,6 +18,8 @@ class Input extends StatefulWidget {
     this.onAttachmentPressed,
     this.onVoiceLongPressStart,
     this.onVoiceLongPressEnd,
+    this.onVoicePanLeft,
+    this.onVoicePanUp,
     this.replyMessage,
     this.onReplyClose,
     required this.onSendPressed,
@@ -39,6 +41,12 @@ class Input extends StatefulWidget {
 
   /// Callback for attachment button tap event.
   final void Function(LongPressEndDetails)? onVoiceLongPressEnd;
+
+  /// Callback for attachment button tap event.
+  final void Function(void)? onVoicePanLeft;
+
+  /// Callback for attachment button tap event.
+  final void Function(void)? onVoicePanUp;
 
   /// Will be called on [SendButton] tap. Has [types.PartialText] which can
   /// be transformed to [types.TextMessage] and added to the messages list.
@@ -293,6 +301,8 @@ class _InputState extends State<Input> {
                         child: VoiceButton(
                           onLongPressStart: widget.onVoiceLongPressStart,
                           onLongPressEnd: widget.onVoiceLongPressEnd,
+                          onPanLeft: widget.onVoicePanLeft,
+                          onPanUp: widget.onVoicePanUp,
                           padding: buttonPadding,
                         ),
                       ),
