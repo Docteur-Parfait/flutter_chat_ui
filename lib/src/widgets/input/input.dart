@@ -44,10 +44,10 @@ class Input extends StatefulWidget {
   final void Function(LongPressEndDetails)? onVoiceLongPressEnd;
 
   /// Callback for attachment button tap event.
-  final void Function(void)? onVoicePanLeft;
+  final void Function()? onVoicePanLeft;
 
   /// Callback for attachment button tap event.
-  final void Function(void)? onVoicePanUp;
+  final void Function()? onVoicePanUp;
 
   /// Will be called on [SendButton] tap. Has [types.PartialText] which can
   /// be transformed to [types.TextMessage] and added to the messages list.

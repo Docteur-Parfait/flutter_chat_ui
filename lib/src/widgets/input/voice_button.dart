@@ -24,11 +24,11 @@ class VoiceButton extends StatefulWidget {
   /// Callback for attachment button tap event.
   final void Function(LongPressEndDetails)? onLongPressEnd;
 
-  /// Callback for attachment button tap event.
-  final void Function(void)? onPanLeft;
+  /// Callback for pan left event.
+  final void Function()? onPanLeft;
 
-  /// Callback for attachment button tap event.
-  final void Function(void)? onPanUp;
+  /// Callback for pan up event.
+  final void Function()? onPanUp;
 
   /// Padding around the button.
   final EdgeInsets padding;
@@ -39,6 +39,7 @@ class VoiceButton extends StatefulWidget {
 
 class _VoiceButtonState extends State<VoiceButton> {
   Offset _startSwipePosition = Offset.zero; // Position de départ du glissement
+  bool _hasSwiped = false; // Indique si un geste de glissement a eu lieu
 
   @override
   Widget build(BuildContext context) => Container(
@@ -50,26 +51,40 @@ class _VoiceButtonState extends State<VoiceButton> {
               0,
             ),
         child: GestureDetector(
-          onLongPressStart: widget.onLongPressStart,
-          onLongPressEnd: widget.onLongPressEnd,
+          onLongPressStart: (details) {
+            _hasSwiped =
+                false; // Réinitialise l'état de glissement au début du press
+            if (widget.onLongPressStart != null) {
+              widget.onLongPressStart!(details);
+            }
+          },
+          onLongPressEnd: (details) {
+            if (!_hasSwiped && widget.onLongPressEnd != null) {
+              widget.onLongPressEnd!(details);
+            }
+          },
           onPanStart: (details) {
             _startSwipePosition = details.localPosition;
           },
-          onPanEnd: (details) {
-            // Calcule la différence entre la position de départ et la fin du glissement
-            final swipeDifference =
-                _startSwipePosition - details.velocity.pixelsPerSecond;
+          onPanUpdate: (details) {
+            final swipeDifference = _startSwipePosition - details.localPosition;
 
             // Si la différence horizontale est supérieure à la verticale
             if (swipeDifference.dx.abs() > swipeDifference.dy.abs()) {
               // Glissement horizontal détecté
               if (swipeDifference.dx > 0) {
-                widget.onPanLeft;
+                _hasSwiped = true; // Indique qu'un glissement a eu lieu
+                if (widget.onPanLeft != null) {
+                  widget.onPanLeft!();
+                }
               }
             } else {
               // Glissement vertical détecté
               if (swipeDifference.dy > 0) {
-                widget.onPanUp;
+                _hasSwiped = true; // Indique qu'un glissement a eu lieu
+                if (widget.onPanUp != null) {
+                  widget.onPanUp!();
+                }
               }
             }
           },
@@ -97,11 +112,6 @@ class _VoiceButtonState extends State<VoiceButton> {
                           InheritedChatTheme.of(context).theme.inputTextColor,
                       package: 'flutter_chat_ui',
                     ),
-            // onPressed:onPressed,
-            // padding: padding,
-            // splashRadius: 24,
-            // tooltip:
-            //     InheritedL10n.of(context).l10n.attachmentButtonAccessibilityLabel,
           ),
         ),
       );

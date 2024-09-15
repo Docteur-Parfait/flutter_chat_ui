@@ -360,10 +360,10 @@ class Chat extends StatefulWidget {
   final void Function(LongPressEndDetails)? onVoiceLongPressEnd;
 
   /// Callback for attachment button tap event.
-  final void Function(void)? onVoicePanLeft;
+  final void Function()? onVoicePanLeft;
 
   /// Callback for attachment button tap event.
-  final void Function(void)? onVoicePanUp;
+  final void Function()? onVoicePanUp;
 
   // Custom text input
   final Widget? customInputWidget;
