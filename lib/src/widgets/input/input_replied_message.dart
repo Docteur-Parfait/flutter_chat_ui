@@ -12,6 +12,7 @@ class InputRepliedMessage extends StatelessWidget {
       this.backgroundColor,
       this.borderColor,
       this.authorNameColor,
+      this.customAuthorName,
       this.messageColor});
 
   final types.Message message;
@@ -19,6 +20,7 @@ class InputRepliedMessage extends StatelessWidget {
   final Color? borderColor;
   final Color? authorNameColor;
   final Color? messageColor;
+  final String? customAuthorName;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,7 @@ class InputRepliedMessage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(message.author.firstName!,
+              Text(customAuthorName ?? message.author.firstName!,
                   style: theme.userNameTextStyle
                       .copyWith(color: authorNameColor ?? Colors.white)),
               TextMessageText(

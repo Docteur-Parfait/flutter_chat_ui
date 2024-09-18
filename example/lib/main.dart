@@ -16,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'global_network_image_builder.dart';
+import 'widgets/record_button.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(const MyApp()));
@@ -40,7 +41,9 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
   List<types.Message> _messages = [];
   final _user = const types.User(
     id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
@@ -67,6 +70,11 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     _loadMessages();
+
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
   }
 
   void _addMessage(types.Message message) {
@@ -303,6 +311,7 @@ class _ChatPageState extends State<ChatPage> {
                 ? VoiceButtonVisibilityMode.recording
                 : VoiceButtonVisibilityMode.always,
           ),
+          customVoiceButton: RecordButton(controller: controller),
         ),
       );
 }

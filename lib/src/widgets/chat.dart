@@ -110,7 +110,8 @@ class Chat extends StatefulWidget {
       this.slidableMessageBuilder,
       this.isLeftStatus = false,
       this.messageWidthRatio = 0.72,
-      this.customInputWidget});
+      this.customInputWidget,
+      this.customVoiceButton});
 
   /// See [Message.audioMessageBuilder].
   final Widget Function(types.AudioMessage, {required int messageWidth})?
@@ -367,6 +368,9 @@ class Chat extends StatefulWidget {
 
   // Custom text input
   final Widget? customInputWidget;
+
+  // Custom voice button
+  final Widget? customVoiceButton;
 
   @override
   State<Chat> createState() => ChatState();
@@ -709,6 +713,7 @@ class ChatState extends State<Chat> {
                             replyMessage: widget.replyMessage,
                             onReplyClose: widget.onReplyClose,
                             customInputWidget: widget.customInputWidget,
+                            customVoiceButton: widget.customVoiceButton,
                           ),
                     ],
                   ),

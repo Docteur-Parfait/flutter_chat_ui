@@ -26,6 +26,7 @@ class RepliedMessage extends StatelessWidget {
       this.backgroundColor,
       this.borderColor,
       this.authorNameColor,
+      this.customAuthorName,
       this.messageColor});
 
   final types.Message message;
@@ -33,6 +34,7 @@ class RepliedMessage extends StatelessWidget {
   final Color? borderColor;
   final Color? authorNameColor;
   final Color? messageColor;
+  final String? customAuthorName;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +82,8 @@ class RepliedMessage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(message.repliedMessage!.author.firstName!,
+              Text(
+                  customAuthorName ?? message.repliedMessage!.author.firstName!,
                   style: currentUserisAuthor
                       ? theme.userNameTextStyle
                           .copyWith(color: authorNameColor ?? Colors.white)

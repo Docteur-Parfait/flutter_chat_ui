@@ -25,6 +25,7 @@ class Input extends StatefulWidget {
     required this.onSendPressed,
     this.options = const InputOptions(),
     this.customInputWidget,
+    this.customVoiceButton,
   });
 
   /// Whether attachment is uploading. Will replace attachment button with a
@@ -65,12 +66,17 @@ class Input extends StatefulWidget {
   // Custom widget
   final Widget? customInputWidget;
 
+  // Custom voice button
+  final Widget? customVoiceButton;
+
   @override
   State<Input> createState() => _InputState();
 }
 
 /// [Input] widget state.
-class _InputState extends State<Input> {
+class _InputState extends State<Input> with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+
   late final _inputFocusNode = FocusNode(
     onKeyEvent: (node, event) {
       if (event.physicalKey == PhysicalKeyboardKey.enter &&
@@ -100,6 +106,11 @@ class _InputState extends State<Input> {
   @override
   void initState() {
     super.initState();
+
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
 
     _textController =
         widget.options.textEditingController ?? InputTextFieldController();
@@ -216,6 +227,7 @@ class _InputState extends State<Input> {
                             child: InputRepliedMessage(
                               message: widget.replyMessage!,
                               messageColor: Colors.white,
+                              customAuthorName: widget.options.customAuthorName,
                             ),
                           ),
                           const SizedBox(
@@ -304,13 +316,16 @@ class _InputState extends State<Input> {
                       ),
                       child: Visibility(
                         visible: _voiceButtonVisible,
-                        child: VoiceButton(
-                          onLongPressStart: widget.onVoiceLongPressStart,
-                          onLongPressEnd: widget.onVoiceLongPressEnd,
-                          onPanLeft: widget.onVoicePanLeft,
-                          onPanUp: widget.onVoicePanUp,
-                          padding: buttonPadding,
-                        ),
+                        child: Container(
+                              child: widget.customVoiceButton,
+                            ) ??
+                            VoiceButton(
+                              onLongPressStart: widget.onVoiceLongPressStart,
+                              onLongPressEnd: widget.onVoiceLongPressEnd,
+                              onPanLeft: widget.onVoicePanLeft,
+                              onPanUp: widget.onVoicePanUp,
+                              padding: buttonPadding,
+                            ),
                       ),
                     ),
                   ],
@@ -365,6 +380,7 @@ class InputOptions {
     this.autofocus = false,
     this.enableSuggestions = true,
     this.enabled = true,
+    this.customAuthorName,
   });
 
   /// Controls the [Input] clear behavior. Defaults to [InputClearMode.always].
@@ -408,4 +424,7 @@ class InputOptions {
 
   /// Controls the [TextInput] enabled behavior. Defaults to [true].
   final bool enabled;
+
+  //  Custom author name
+  final String? customAuthorName;
 }
