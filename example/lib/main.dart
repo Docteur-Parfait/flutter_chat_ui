@@ -16,7 +16,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'global_network_image_builder.dart';
-import 'widgets/record_button.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(const MyApp()));
@@ -311,7 +310,6 @@ class _ChatPageState extends State<ChatPage>
                 ? VoiceButtonVisibilityMode.recording
                 : VoiceButtonVisibilityMode.always,
           ),
-          customVoiceButton: RecordButton(controller: controller),
         ),
       );
 }

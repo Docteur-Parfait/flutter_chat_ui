@@ -316,9 +316,7 @@ class _InputState extends State<Input> with SingleTickerProviderStateMixin {
                       ),
                       child: Visibility(
                         visible: _voiceButtonVisible,
-                        child: Container(
-                              child: widget.customVoiceButton,
-                            ) ??
+                        child: widget.customVoiceButton ??
                             VoiceButton(
                               onLongPressStart: widget.onVoiceLongPressStart,
                               onLongPressEnd: widget.onVoiceLongPressEnd,

@@ -61,27 +61,30 @@ class InputRepliedMessage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(customAuthorName ?? message.author.firstName!,
-                  style: theme.userNameTextStyle
-                      .copyWith(color: authorNameColor ?? Colors.white)),
-              TextMessageText(
-                bodyTextStyle: messageColor != null
-                    ? theme.sentMessageBodyTextStyle.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 13)
-                    : theme.sentMessageBodyTextStyle.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 13),
-                text: repliedMessage,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(customAuthorName ?? message.author.firstName!,
+                    style: theme.userNameTextStyle
+                        .copyWith(color: authorNameColor ?? Colors.white)),
+                TextMessageText(
+                  bodyTextStyle: messageColor != null
+                      ? theme.sentMessageBodyTextStyle.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 13)
+                      : theme.sentMessageBodyTextStyle.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 13),
+                  text: repliedMessage,
+                  maxLines: 1,
+                  options: const TextMessageOptions(isTextSelectable: false),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
           if (message.type == types.MessageType.file)
             Text('(${(message as types.FileMessage).size ~/ 1024}KB)',

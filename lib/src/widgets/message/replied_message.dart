@@ -79,37 +79,41 @@ class RepliedMessage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                  customAuthorName ?? message.repliedMessage!.author.firstName!,
-                  style: currentUserisAuthor
-                      ? theme.userNameTextStyle
-                          .copyWith(color: authorNameColor ?? Colors.white)
-                      : theme.userNameTextStyle.copyWith(
-                          color: authorNameColor ??
-                              InheritedChatTheme.of(context)
-                                  .theme
-                                  .primaryColor)),
-              TextMessageText(
-                bodyTextStyle: messageColor != null
-                    ? theme.sentMessageBodyTextStyle.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 13)
-                    : currentUserisAuthor
-                        ? theme.sentMessageBodyTextStyle.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300,
-                            fontSize: 13)
-                        : theme.receivedMessageBodyTextStyle.copyWith(
-                            fontWeight: FontWeight.w300, fontSize: 13),
-                text: repliedMessage,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                    customAuthorName ??
+                        message.repliedMessage!.author.firstName!,
+                    style: currentUserisAuthor
+                        ? theme.userNameTextStyle
+                            .copyWith(color: authorNameColor ?? Colors.white)
+                        : theme.userNameTextStyle.copyWith(
+                            color: authorNameColor ??
+                                InheritedChatTheme.of(context)
+                                    .theme
+                                    .primaryColor)),
+                TextMessageText(
+                  bodyTextStyle: messageColor != null
+                      ? theme.sentMessageBodyTextStyle.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 13)
+                      : currentUserisAuthor
+                          ? theme.sentMessageBodyTextStyle.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 13)
+                          : theme.receivedMessageBodyTextStyle.copyWith(
+                              fontWeight: FontWeight.w300, fontSize: 13),
+                  text: repliedMessage,
+                  maxLines: 1,
+                  options: const TextMessageOptions(isTextSelectable: false),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
           if (message.repliedMessage!.type == types.MessageType.file)
             Text(
