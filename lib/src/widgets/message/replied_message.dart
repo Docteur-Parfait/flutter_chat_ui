@@ -78,6 +78,7 @@ class RepliedMessage extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
             child: Column(
